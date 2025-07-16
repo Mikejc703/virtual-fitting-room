@@ -1,6 +1,28 @@
-pluginManagement { includeBuild("../node_modules/@react-native/gradle-plugin") }
-plugins { id("com.facebook.react.settings") }
-extensions.configure(com.facebook.react.ReactSettingsExtension){ ex -> ex.autolinkLibrariesFromCommand() }
+pluginManagement {
+    repositories {
+        google()
+        mavenCentral() // ✅ Add this
+        gradlePluginPortal()
+        maven { url '../node_modules/react-native/android' }
+    }
+    includeBuild("../node_modules/@react-native/gradle-plugin")
+}
+
+plugins {
+    id("com.facebook.react.settings")
+}
+
+extensions.configure(com.facebook.react.ReactSettingsExtension) { ex ->
+    ex.autolinkLibrariesFromCommand()
+}
+
+dependencyResolutionManagement {
+    repositories {
+        google()
+        mavenCentral() // ✅ Add this
+    }
+}
+
 rootProject.name = 'VirtualFittingMVP'
 include ':app'
 includeBuild('../node_modules/@react-native/gradle-plugin')

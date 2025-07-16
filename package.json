@@ -1,5 +1,5 @@
 {
-  "name": "VirtualFittingMVP",
+  "name": "virtual-fitting-mvp",
   "version": "0.0.1",
   "private": true,
   "scripts": {
@@ -10,9 +10,17 @@
     "test": "jest"
   },
   "dependencies": {
+    "@react-native-async-storage/async-storage": "^2.2.0",
+    "@react-native/new-app-screen": "0.80.1",
+    "@react-navigation/native": "^7.1.14",
+    "@react-navigation/native-stack": "^7.3.21",
+    "firebase": "^11.10.0",
     "react": "19.1.0",
     "react-native": "0.80.1",
-    "@react-native/new-app-screen": "0.80.1"
+    "react-native-gesture-handler": "~2.24.0",
+    "react-native-image-picker": "^8.2.1",
+    "react-native-safe-area-context": "5.4.0",
+    "react-native-screens": "~4.11.1"
   },
   "devDependencies": {
     "@babel/core": "^7.25.2",

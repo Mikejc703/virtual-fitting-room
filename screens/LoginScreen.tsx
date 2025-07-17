@@ -1,25 +1,64 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, StyleSheet, TouchableOpacity } from 'react-native';
+import {
+  View,
+  Text,
+  TextInput,
+  StyleSheet,
+  TouchableOpacity,
+  Alert,
+} from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { useTheme } from '../context/ThemeContext';
 import { useAuth } from '../context/AuthContext';
+import {
+  signInWithEmailAndPassword,
+  createUserWithEmailAndPassword,
+} from 'firebase/auth';
+import { auth } from '../firebase/firebaseConfig';
 
 const LoginScreen = () => {
   const { theme } = useTheme();
   const { login, continueAsGuest } = useAuth();
   const navigation = useNavigation();
   const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
 
-  const handleLogin = () => {
-    if (!email.trim()) return;
+  const handleLogin = async () => {
+    if (!email.trim() || !password.trim()) return;
 
-    login({ id: Date.now().toString(), email });
-    // You can optionally navigate if using auth gating later
+    try {
+      const result = await signInWithEmailAndPassword(auth, email, password);
+      const user = result.user;
+      login({ id: user.uid, email: user.email || '' });
+    } catch (error: any) {
+      if (error.code === 'auth/user-not-found') {
+        // Auto-register if user doesn't exist
+        try {
+          const result = await createUserWithEmailAndPassword(auth, email, password);
+          const user = result.user;
+          login({ id: user.uid, email: user.email || '' });
+        } catch (err) {
+          if (err instanceof Error) {
+            Alert.alert('Sign Up Failed', err.message);
+          } else {
+            Alert.alert('Sign Up Failed', 'An unknown error occurred.');
+          }
+        }
+      } else {
+        if (error instanceof Error) {
+          Alert.alert('Login Failed', error.message);
+        } else {
+          Alert.alert('Login Failed', 'An unknown error occurred.');
+        }
+      }
+    }
   };
 
   return (
     <View style={[styles.container, { backgroundColor: theme.background }]}>
-      <Text style={[styles.title, { color: theme.text }]}>Welcome to Virtual Fitting Room</Text>
+      <Text style={[styles.title, { color: theme.text }]}>
+        Welcome to Virtual Fitting Room
+      </Text>
 
       <TextInput
         style={[styles.input, { borderColor: theme.inputBorder, color: theme.text }]}
@@ -31,12 +70,29 @@ const LoginScreen = () => {
         autoCapitalize="none"
       />
 
-      <TouchableOpacity style={[styles.button, { backgroundColor: theme.card }]} onPress={handleLogin}>
+      <TextInput
+        style={[styles.input, { borderColor: theme.inputBorder, color: theme.text }]}
+        placeholder="Enter your password"
+        placeholderTextColor={theme.placeholder}
+        value={password}
+        onChangeText={setPassword}
+        secureTextEntry
+      />
+
+      <TouchableOpacity
+        style={[styles.button, { backgroundColor: theme.card }]}
+        onPress={handleLogin}
+      >
         <Text style={[styles.buttonText, { color: theme.text }]}>Log In</Text>
       </TouchableOpacity>
 
-      <TouchableOpacity style={[styles.button, { backgroundColor: theme.card }]} onPress={continueAsGuest}>
-        <Text style={[styles.buttonText, { color: theme.text }]}>Continue as Guest</Text>
+      <TouchableOpacity
+        style={[styles.button, { backgroundColor: theme.card }]}
+        onPress={continueAsGuest}
+      >
+        <Text style={[styles.buttonText, { color: theme.text }]}>
+          Continue as Guest
+        </Text>
       </TouchableOpacity>
     </View>
   );

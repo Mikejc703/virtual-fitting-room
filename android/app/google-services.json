@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "981238327479",
+    "project_id": "virtualfittingroom-3e702",
+    "storage_bucket": "virtualfittingroom-3e702.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:981238327479:android:bab65fb8956406073c8532",
+        "android_client_info": {
+          "package_name": "com.virtualfittingmvp"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDbuPjcSZ8LLWTIpJjbaAA6qCvIADl0QcY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
